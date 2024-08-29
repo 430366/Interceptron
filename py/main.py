@@ -26,7 +26,7 @@ class Interceptron:
         self.send_data({ "type": "init", "init": "graph", "name": name, "labels": labels })
         self.graph_stores.append({ "name": name, "labels": labels, "listening": False })
     def graph_data(self, name, f1, f2):
-        self.send_data({ "type": "graphdata", "name": name, "x": f1(), "y": f2() })
+        self.send_data({ "type": "graphdata", "name": name, "y": f1(), "x": f2() })
     def graph_listen(self, name, callback1, callback2, delay=50):
         if name not in self.graph_stores: return self.err("Graph name not found/initialized: "+name, ValueError)
         if self.graph_stores[self.graph_stores.index(name)]["listening"]: return self.err("Graph is already listening. You can close the listener with Interceptron.graph_close")
@@ -38,5 +38,6 @@ class Interceptron:
         loop()
         return self.graph_stores.index(name)
     def graph_close(self, name):
+        if name not in self.graph_stores: return self.err("Graph name not found/initialized: "+name, ValueError)
         self.graph_stores[self.graph_stores.index(name)]["listening"] = False
     
